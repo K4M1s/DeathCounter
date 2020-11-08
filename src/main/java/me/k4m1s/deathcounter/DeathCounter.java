@@ -1,4 +1,5 @@
 package me.k4m1s.deathcounter;
+
 import me.k4m1s.deathcounter.Chat.Messages;
 import me.k4m1s.deathcounter.Commands.DeathCounterCommand;
 import me.k4m1s.deathcounter.Config.ConfigManager;
@@ -7,6 +8,7 @@ import me.k4m1s.deathcounter.Database.DatabaseManager;
 import me.k4m1s.deathcounter.Database.Models.PlayerDeathCount;
 import me.k4m1s.deathcounter.Listeners.*;
 import me.k4m1s.deathcounter.Sidebar.SidebarManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -59,6 +61,9 @@ public final class DeathCounter extends JavaPlugin {
             sidebarManager = new SidebarManager();
             getServer().getScheduler().runTaskTimer(this, () -> sidebarManager.update(), 0, 20);
         }
+
+        int pluginId = 1234; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     @Override
