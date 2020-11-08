@@ -1,4 +1,4 @@
-name: Deathcounter
+name: DeathCounter
 version: ${project.version}
 main: me.k4m1s.deathcounter.DeathCounter
 api-version: 1.16
