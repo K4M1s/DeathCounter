@@ -31,7 +31,7 @@ public class DatabaseManager {
     public void openConnection() {
         try {
             if (connection != null && !connection.isClosed()) return;
-            connection = DriverManager.getConnection("jdbc:mysql://" + this.sHost + ":" + this.iPort + "/" + this.sDatabase, this.sUser, this.sPassword);
+            connection = DriverManager.getConnection("jdbc:mysql://" + this.sHost + ":" + this.iPort + "/" + this.sDatabase +"?useSSL=false", this.sUser, this.sPassword);
         } catch(SQLException e) {
             Messages.sendMessage("&cMySQL connection failed!");
             e.printStackTrace();
