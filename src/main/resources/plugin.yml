@@ -1,0 +1,12 @@
+name: Deathcounter
+version: ${project.version}
+main: me.k4m1s.deathcounter.DeathCounter
+api-version: 1.16
+authors: [ K4M1s ]
+description: Player's death counter with scoreboard
+
+commands:
+  deathcounter:
+    description: Main command for DeathCounter plugin.
+    usage: /deathcounter
+    permission: deathcounter.admin
