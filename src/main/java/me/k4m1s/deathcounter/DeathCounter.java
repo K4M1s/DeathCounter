@@ -62,7 +62,7 @@ public final class DeathCounter extends JavaPlugin {
             getServer().getScheduler().runTaskTimer(this, () -> sidebarManager.update(), 0, 20);
         }
 
-        int pluginId = 1234; // <-- Replace with the id of your plugin!
+        int pluginId = 9342;
         Metrics metrics = new Metrics(this, pluginId);
     }
 
