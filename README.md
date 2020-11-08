@@ -18,6 +18,9 @@ Simple minecraft spigot plugin that allows counting player deaths. Data about th
 7. Start your server.
 
 ## Release History
+* 1.0.2
+   * Fixed DB connection issues, added CommandTabCompleter, added permissions
+   
 * 1.0.1
    * Fix for DB SSL Error, Added bStats
 
