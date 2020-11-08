@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +22,12 @@ public class DeathCounterCommand implements CommandExecutor {
 
         switch(args[0]) {
             case "add":
+                if (sender instanceof Player) {
+                    if ( !( sender.hasPermission("deathcounter.add")) ) {
+                        Messages.sendMessage(sender, "&cYou do not have access to this command.");
+                        return true;
+                    }
+                }
                 if (args.length < 3) return this.cmdHelp(sender);
                 String playerName = args[1];
                 String method = args[2];
@@ -79,6 +86,12 @@ public class DeathCounterCommand implements CommandExecutor {
                 }
                 return this.cmdAdd(sender, player, damageCause, killer, mobName);
             case "remove":
+                if (sender instanceof Player) {
+                    if ( !( sender.hasPermission("deathcounter.remove")) ) {
+                        Messages.sendMessage(sender, "&cYou do not have access to this command.");
+                        return true;
+                    }
+                }
                 if (args.length < 2) return this.cmdHelp(sender);
                 try {
                     int ID = Integer.parseInt(args[1]);
@@ -88,6 +101,12 @@ public class DeathCounterCommand implements CommandExecutor {
                     return false;
                 }
             case "list":
+                if (sender instanceof Player) {
+                    if ( !( sender.hasPermission("deathcounter.list")) ) {
+                        Messages.sendMessage(sender, "&cYou do not have access to this command.");
+                        return true;
+                    }
+                }
                 int page = 1;
                 if (args.length >= 2) {
                     try {
@@ -99,6 +118,12 @@ public class DeathCounterCommand implements CommandExecutor {
                 }
                 return this.cmdList(sender, page);
             case "details":
+                if (sender instanceof Player) {
+                    if ( !( sender.hasPermission("deathcounter.details")) ) {
+                        Messages.sendMessage(sender, "&cYou do not have access to this command.");
+                        return true;
+                    }
+                }
                 if (args.length < 2) return this.cmdHelp(sender);
                 OfflinePlayer dPlayer = null;
                 for(OfflinePlayer p : Bukkit.getOfflinePlayers()) {
@@ -117,6 +142,25 @@ public class DeathCounterCommand implements CommandExecutor {
                     }
                 }
                 return this.cmdDetails(sender, dPlayer, dPage);
+            case "me":
+                if (sender instanceof Player) {
+                    if ( !( sender.hasPermission("deathcounter.me")) ) {
+                        Messages.sendMessage(sender, "&cYou do not have access to this command.");
+                        return true;
+                    }
+                }
+                if (args.length < 2) return this.cmdHelp(sender);
+                int mPage = 1;
+                if (args.length >= 3) {
+                    try {
+                        mPage = Integer.parseInt(args[2]);
+                    } catch(NumberFormatException e) {
+                        Messages.sendMessage(sender, "&cPage is not valid");
+                        return false;
+                    }
+                }
+                return this.cmdDetails(sender, (OfflinePlayer) sender, mPage);
+
             default:
                 return this.cmdHelp(sender);
         }
@@ -177,13 +221,19 @@ public class DeathCounterCommand implements CommandExecutor {
         DatabaseHelper.getPlayersCount(result -> {
             if (result < 0) return;
             int offset = 0;
-            if (page > 1) offset = 6;
-            offset *= page;
-            final int maxPages = ((int) Math.floor(result / 6D) > 0? (int) Math.floor(result / 6D) : 1);
+            if (page > 1) {
+                offset = 6;
+                offset *= (page - 1);
+            }
+            final int maxPages = ((int) Math.ceil(result / 6D) > 0? (int) Math.ceil(result / 6D) : 1);
+            if (page > maxPages) {
+                Messages.sendMessage(sender, "&cThis page does not exists.");
+                return;
+            }
             DatabaseHelper.getPlayersDeathCount(offset, 6, playerDeathCount -> {
                 Messages.sendHeader(sender, "Page " + page + "/" + maxPages);
                 for(PlayerDeathCount pdc : playerDeathCount) {
-                    Messages.sendMessage(sender, pdc.getPlayer().getName() + ": &c" + pdc.getCount());
+                    Messages.sendMessage(sender, pdc.getPlayer().getName() + ": &c" + pdc.getCount(), false);
                 }
                 Messages.sendFooter(sender);
             });
@@ -203,9 +253,15 @@ public class DeathCounterCommand implements CommandExecutor {
         DatabaseHelper.getPlayerDeathCount(player, playerDeathCount -> {
             if (playerDeathCount == null) return;
             int offset = 0;
-            if (page > 1) offset = 6;
-            offset *= page;
-            final int maxPages = (int) Math.floor(playerDeathCount.getCount() / 6D);
+            if (page > 1) {
+                offset = 6;
+                offset *= (page - 1);
+            }
+            final int maxPages = ((int) Math.ceil(playerDeathCount.getCount() / 6D) > 0? (int) Math.ceil(playerDeathCount.getCount() / 6D) : 1);
+            if (page > maxPages) {
+                Messages.sendMessage(sender, "&cThis page does not exists.");
+                return;
+            }
             DatabaseHelper.getPlayerDeaths(player, offset, 6, playerDeath -> {
                 Messages.sendHeader(sender, "Page " + page + "/" + maxPages);
                 for(PlayerDeath pd : playerDeath) {

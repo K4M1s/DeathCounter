@@ -8,5 +8,4 @@ description: Player's death counter with scoreboard
 commands:
   deathcounter:
     description: Main command for DeathCounter plugin.
-    usage: /deathcounter
-    permission: deathcounter.admin
+    usage: 'Use /deathcounter help'

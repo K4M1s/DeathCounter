@@ -56,7 +56,15 @@ public class DatabaseManager {
      * @return Connection
      *  MySQL database connection.
      */
-    public Connection getConnection() { return connection; }
+    public Connection getConnection() {
+        try {
+            if (this.connection == null || !this.connection.isValid(2)) this.openConnection();
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
 
     /**
      * Creates required tables in MySQL database.

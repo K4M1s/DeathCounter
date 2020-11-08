@@ -76,22 +76,19 @@ public class PlayerDeath {
      *  List of players and their death count.
      */
     public static List<PlayerDeath> getPlayerDeaths(OfflinePlayer player, int offset, int limit) {
-        DeathCounter.getDatabaseManager().openConnection();
         try {
-            PreparedStatement playerDeaths = DeathCounter.getDatabaseManager().getConnection().prepareStatement("SELECT `ID`, `playerUUID`, `method`, `initiator`, `createdAt`, `mobName` FROM `deathcounter_deaths` WHERE playerUUID=? LIMIT " + offset + ", " + limit);
+            PreparedStatement playerDeaths = DeathCounter.getDatabaseManager().getConnection().prepareStatement("SELECT `ID`, `playerUUID`, `method`, `initiator`, `createdAt`, `mobName` FROM `deathcounter_deaths` WHERE playerUUID=? ORDER BY createdAt DESC LIMIT " + offset + ", " + limit);
             playerDeaths.setString(1, player.getUniqueId().toString());
             ResultSet result = playerDeaths.executeQuery();
             List<PlayerDeath> data = new ArrayList<>();
             while(result.next()) {
                 data.add(new PlayerDeath(result.getString("playerUUID"), result.getString("method"), result.getTimestamp("createdAt"), result.getString("initiator"), result.getString("mobName")));
             }
-            DeathCounter.getDatabaseManager().closeConnection();
             return data;
         } catch(SQLException e) {
             Messages.sendMessage("&cError has occurred while getting players death count.");
             e.printStackTrace();
         }
-        DeathCounter.getDatabaseManager().closeConnection();
         return null;
     }
 
@@ -102,7 +99,6 @@ public class PlayerDeath {
      *  True if success, False otherwise.
      */
     public static boolean removePlayerDeath(int ID) {
-        DeathCounter.getDatabaseManager().openConnection();
         try {
             PreparedStatement removeDeath = DeathCounter.getDatabaseManager().getConnection().prepareStatement("DELETE FROM deathcounter_deaths WHERE ID=?");
             removeDeath.setInt(1, ID);

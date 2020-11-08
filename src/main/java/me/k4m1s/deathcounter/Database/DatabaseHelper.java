@@ -99,7 +99,6 @@ public class DatabaseHelper {
     public static void addPlayerToDatabase(final Player player, final IDatabaseBool callback) {
         Bukkit.getScheduler().runTaskAsynchronously(DeathCounter.getPlugin(), () -> {
             try {
-                DeathCounter.getDatabaseManager().openConnection();
                 PreparedStatement nameUpdate = DeathCounter.getDatabaseManager().getConnection().prepareStatement("INSERT INTO `deathcounter_players`(`UUID`, `playerName`) VALUES (?,?)");
                 nameUpdate.setString(1, player.getUniqueId().toString());
                 nameUpdate.setString(2, player.getName());
@@ -116,7 +115,6 @@ public class DatabaseHelper {
     public static void addPlayerToDatabase(final OfflinePlayer player, final IDatabaseBool callback) {
         Bukkit.getScheduler().runTaskAsynchronously(DeathCounter.getPlugin(), () -> {
             try {
-                DeathCounter.getDatabaseManager().openConnection();
                 PreparedStatement nameUpdate = DeathCounter.getDatabaseManager().getConnection().prepareStatement("INSERT INTO `deathcounter_players`(`UUID`, `playerName`) VALUES (?,?)");
                 nameUpdate.setString(1, player.getUniqueId().toString());
                 nameUpdate.setString(2, player.getName());
@@ -133,7 +131,6 @@ public class DatabaseHelper {
     public static void addPlayerDeath(final String playerUUID, final String deathCause, final String killerUUID, final String mobName, IDatabaseBool callback) {
         Bukkit.getScheduler().runTaskAsynchronously(DeathCounter.getPlugin(), () -> {
             try {
-                DeathCounter.getDatabaseManager().openConnection();
                 PreparedStatement deathInsert = DeathCounter.getDatabaseManager().getConnection().prepareStatement("INSERT INTO `deathcounter_deaths`(`playerUUID`, `method`, `initiator`, `mobName`) VALUES (?, ?, ?, ?)");
                 deathInsert.setString(1, playerUUID);
                 deathInsert.setString(2, deathCause);
@@ -168,7 +165,6 @@ public class DatabaseHelper {
     public static void getPlayersCount(IDatabaseInt callback) {
         Bukkit.getScheduler().runTaskAsynchronously(DeathCounter.getPlugin(), () -> {
             try {
-                DeathCounter.getDatabaseManager().openConnection();
                 PreparedStatement playersCount = DeathCounter.getDatabaseManager().getConnection().prepareStatement("SELECT count(*) as count FROM deathcounter_players GROUP BY UUID");
                 ResultSet result = playersCount.executeQuery();
                 result.next();

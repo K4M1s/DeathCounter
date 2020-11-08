@@ -27,7 +27,7 @@ public class SidebarManager {
     public void createBoardForPlayer(Player player) {
         FastBoard board = new FastBoard(player);
 
-        board.updateTitle(ChatColor.RED + "TOP 10 Deaths");
+        board.updateTitle(ChatColor.translateAlternateColorCodes('&',"&6&lTOP 10 Deaths"));
         boards.put(player.getUniqueId(), board);
     }
 
@@ -41,7 +41,7 @@ public class SidebarManager {
 
     private void updateBoard(FastBoard board, PlayerDeathCount[] data) {
         for(int i=0; i<data.length; i++) {
-            board.updateLine(i, data[i].getPlayer().getName() + ": " + data[i].getCount());
+            board.updateLine(i, ChatColor.translateAlternateColorCodes('&', data[i].getPlayer().getName() + ": &a" + data[i].getCount()));
         }
     }
 }

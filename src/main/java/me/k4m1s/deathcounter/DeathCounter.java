@@ -2,6 +2,7 @@ package me.k4m1s.deathcounter;
 
 import me.k4m1s.deathcounter.Chat.Messages;
 import me.k4m1s.deathcounter.Commands.DeathCounterCommand;
+import me.k4m1s.deathcounter.Commands.DeathCounterTabCompleter;
 import me.k4m1s.deathcounter.Config.ConfigManager;
 import me.k4m1s.deathcounter.Database.DatabaseHelper;
 import me.k4m1s.deathcounter.Database.DatabaseManager;
@@ -55,6 +56,7 @@ public final class DeathCounter extends JavaPlugin {
         PluginCommand deathcounter = this.getCommand("deathcounter");
         if (deathcounter != null) {
             deathcounter.setExecutor(new DeathCounterCommand());
+            deathcounter.setTabCompleter(new DeathCounterTabCompleter());
         }
 
         if (DeathCounter.getPlugin().getConfig().getBoolean("displaySidebar")) {

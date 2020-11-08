@@ -42,7 +42,6 @@ public class PlayerDeathCount {
      *  List of players and their death count.
      */
     public static List<PlayerDeathCount> getPlayersDeathCount(int offset, int limit) {
-        DeathCounter.getDatabaseManager().openConnection();
         try {
             PreparedStatement playersDeathCount = DeathCounter.getDatabaseManager().getConnection().prepareStatement("SELECT playerUUID, count(*) count FROM deathcounter_deaths GROUP BY playerUUID ORDER BY count(*) DESC LIMIT " + offset + ", " + limit);
             ResultSet result = playersDeathCount.executeQuery();
@@ -50,13 +49,11 @@ public class PlayerDeathCount {
             while(result.next()) {
                 data.add(new PlayerDeathCount(result.getString("playerUUID"), result.getInt("count")));
             }
-            DeathCounter.getDatabaseManager().closeConnection();
             return data;
         } catch(SQLException e) {
             Messages.sendMessage("&cError has occurred while getting players death count.");
             e.printStackTrace();
         }
-        DeathCounter.getDatabaseManager().closeConnection();
         return null;
     }
 
@@ -68,21 +65,18 @@ public class PlayerDeathCount {
      *  Player death count.
      */
     public static PlayerDeathCount getPlayerDeathCount(OfflinePlayer player) {
-        DeathCounter.getDatabaseManager().openConnection();
         try {
             PreparedStatement playerDeathCount = DeathCounter.getDatabaseManager().getConnection().prepareStatement("SELECT playerUUID, count(*) count FROM deathcounter_deaths WHERE playerUUID=? GROUP BY playerUUID ORDER BY count(*)");
             playerDeathCount.setString(1, player.getUniqueId().toString());
             ResultSet result = playerDeathCount.executeQuery();
             if (result.next()) {
                 PlayerDeathCount pdc = new PlayerDeathCount(result.getString("playerUUID"), result.getInt("count"));
-                DeathCounter.getDatabaseManager().closeConnection();
                 return pdc;
             }
         } catch(SQLException e) {
             Messages.sendMessage("&cError has occurred while getting players death count.");
             e.printStackTrace();
         }
-        DeathCounter.getDatabaseManager().closeConnection();
         return null;
     }
 }

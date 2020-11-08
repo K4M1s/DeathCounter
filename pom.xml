@@ -6,7 +6,7 @@
 
     <groupId>me.k4m1s</groupId>
     <artifactId>deathcounter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>Deathcounter</name>
