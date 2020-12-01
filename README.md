@@ -1,4 +1,4 @@
-# RealTimeWeather
+# DeathCounter
 
 Simple minecraft spigot plugin that allows counting player deaths. Data about the death of players is stored in MySQL database and displayed in sidebar. 
 
